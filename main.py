@@ -4,8 +4,6 @@ import httpx
 import os
 import sys
 
-load_dotenv()
-
 mcp = FastMCP("WEATHER")
 
 load_dotenv()
@@ -42,11 +40,19 @@ def get_weather(location: str) -> dict:
     try:
         response = httpx.get(url, params=params, timeout=10.0)
         response.raise_for_status()
+        
     except httpx.RequestError as e:
-        print(f"Network error while requesting weather: {e}", file=sys.stderr)
+        print(
+            f"Network error while requesting weather: {e}",
+            file=sys.stderr
+        )
         sys.exit(1)
+
     except httpx.HTTPStatusError as e:
-        print(f"Error response {e.response.status_code} from weather API: {e}", file=sys.stderr)
+        print(
+            f"Error response {e.response.status_code} from weather API: {e}",
+            file=sys.stderr
+            )
         sys.exit(1)
 
     data = response.json()
